@@ -20,7 +20,7 @@ export async function linkMember (ngIdOrLabel, ressourceId, org, label) {
     id: member.id,
     label: label || member.id,
     domainName: member.domainName,
-    type: member.type,
+    kind: member.kind,
   };
 
   Logger.info(`Linking member ${member.id} to Network Group ${found.item.id}`);
@@ -61,7 +61,7 @@ export async function createExternalPeerWithParent (ngIdOrLabel, label, publicKe
     id: `external_${uuidv4()}`,
     label: `Parent of ${label}`,
     domainName: `${label}.m.${found.item.id}.${NG.DOMAIN}`,
-    type: 'external',
+    kind: 'EXTERNAL',
   };
 
   Logger.info(`Creating a parent member ${parentMember.id} linked to Network Group ${found.item.id}`);

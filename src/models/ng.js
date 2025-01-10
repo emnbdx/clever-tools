@@ -11,15 +11,15 @@ export const TIMEOUT = 5000;
 export const INTERVAL = 500;
 export const DOMAIN = 'ng-cc.cloud';
 export const TYPE_PREFIXES = {
-  app_: 'application',
-  addon_: 'addon',
-  external_: 'external',
+  app_: 'APPLICATION',
+  addon_: 'ADDON',
+  external_: 'EXTERNAL',
 };
 
 /**
  * Construct members from members_ids
  * @param {Array<string>} members_ids
- * @returns {Array<Object>} Array of members with id, domainName and type
+ * @returns {Array<Object>} Array of members with id, domainName and kind
  */
 export function constructMembers (ngId, membersIds) {
   return membersIds.map((id) => {
@@ -29,9 +29,9 @@ export function constructMembers (ngId, membersIds) {
     return {
       id,
       domainName,
-      // Get type from prefix match in id (app_*, addon_*, external_*) or default to 'application'
-      type: prefixToType[Object.keys(prefixToType).find((p) => id.startsWith(p))]
-        || 'application',
+      // Get kind from prefix match in id (app_*, addon_*, external_*) or default to 'APPLICATION'
+      kind: prefixToType[Object.keys(prefixToType).find((p) => id.startsWith(p))]
+        || TYPE_PREFIXES.app_,
     };
   });
 }
