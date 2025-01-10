@@ -801,10 +801,10 @@ async function run () {
   }, makeDefault.makeDefault);
 
   // NETWORK GROUP COMMANDS
-  const ngCreateExternalPeerCommand = cliparse.command('external-peer', {
+  /* const ngCreateExternalPeerCommand = cliparse.command('external-peer', {
     description: 'Create an external peer in a Network Group',
     args: [args.ngRessourceIdOrLabel, args.publicKey, args.ngIdOrLabel],
-  }, ng.createExternalPeer);
+  }, ng.createExternalPeer); */
   const ngDeleteExternalPeerCommand = cliparse.command('external-peer', {
     description: 'Delete an external peer from a Network Group',
     args: [args.ngRessourceIdOrLabel, args.ngIdOrLabel],
@@ -813,7 +813,7 @@ async function run () {
     description: 'Create a Network Group',
     args: [args.ngLabel],
     privateOptions: [opts.ngMembersIds, opts.ngDescription, opts.optTags],
-    commands: [ngCreateExternalPeerCommand],
+    // commands: [ngCreateExternalPeerCommand],
   }, ng.createNg);
   const ngDeleteCommand = cliparse.command('delete', {
     description: 'Delete a Network Group',
@@ -823,7 +823,6 @@ async function run () {
   const ngLinkCommand = cliparse.command('link', {
     description: 'Link a member or an external peer to a Network Group',
     args: [args.ngRessourceIdOrLabel, args.ngIdOrLabel],
-    options: [opts.ngMemberLabel],
   }, ng.linkToNg);
   const ngUnlinkCommand = cliparse.command('unlink', {
     description: 'Unlink a member or an external peer from a Network Group',

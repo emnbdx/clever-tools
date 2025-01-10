@@ -15,23 +15,26 @@ Learn more about Materia KV: https://www.clever-cloud.com/developers/doc/addons/
   },
   ng: {
     status: 'beta',
-    description: 'Manage Network Groups to link applications, add-ons, external peers through a Wireguard® network',
+    description: 'Manage Network Groups to link applications, add-ons, external peers through a Wireguard network',
     instructions: `
 - Create a Network Group:
     clever ng create myNG
-- Create a Network Group with members (application, add-on, external):
-    clever ng create myNG --members-ids appId1,appId2
-- Add an application to an existing Network Group:
-    clever ng add-app myNG myApp
 - List Network Groups:
-    clever ng list
-- List Network Groups members:
-    clever ng members list myNG
-- List Network Groups peers (instances of a member):
-    clever ng peers list myNG
+    clever ng
 - Delete a Network Group:
     clever ng delete myNG
-
-Learn more about Network Groups: https://github.com/CleverCloud/clever-tools/tree/master/docs/ng.md`,
+- Create a Network Group with members (application, add-on, external):
+    clever ng create myNG --members-ids appId1,appId2
+- (Un)Link an application to an existing Network Group:
+    clever ng link appId myNG
+    clever ng unlink appId myNG
+- Get the Wireguard configuration of a peer:
+    clever ng get-config peerIdOrLabel
+- Get details about a Network Group, a member or a peer:
+    clever ng get myNg
+    clever ng get appId
+    clever ng get peerId
+    clever ng get memberLabel
+Learn more about Network Groups: https://github.com/CleverCloud/clever-tools/blob/davlgd-new-ng/docs/ng.md`,
   },
 };

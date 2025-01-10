@@ -2,8 +2,8 @@
 
 Network Groups (NG) are a way to create a private secure network between resources inside Clever Cloud infrastructure, using [Wireguard](https://www.wireguard.com/). It's also possible to connect external resources to a Network Group. There are three components to this feature:
 
-* Network Group: A group of resources that can communicate with each through an encrypted tunnel
-* Member: A resource that can be part of a Network Group (`application`, `addon` or `external`)
+* Network Group: a group of resources that can communicate with each through an encrypted tunnel
+* Member: a resource that can be part of a Network Group (`application`, `addon` or `external`)
 * Peer: Instance of a resource connected to a Network Group (can be `external`)
 
 A Network Group is defined by an ID (`ngId`) and a `label`. It can be completed by a `description` and `tags`.
@@ -20,22 +20,16 @@ When you create a Network Group, a Wireguard configuration is generated with a c
 When an application connects to a Network Group, you can reach it on any port inside a NG through its domain name. Any instance of this application is a peer, you can reach independently through an IP (from the attributed CIDR). It works the same way for add-ons and external resources. During alpha testing phase, only applications are supported.
 
 > [!TIP]
-> A Network Group member domain name is composed this way: `<memberID>.m.<ngID>.ng.clever-cloud.com`
+> A Network Group member domain name is composed this way: `<memberID>.m.<ngID>.ng-cc.cloud`
 
 ## Prerequisites
 
-To use Network Groups, you need [Clever Tools installed](/docs/setup-systems.md) in a test version or higher than `4.0.0`. You can check your version with the following command:
+To use Network Groups, you need [an alpha release of Clever Tools](https://github.com/CleverCloud/clever-tools/pull/780).
+
+Activate `ng` feature flag to manage Network Groups:
 
 ```
-clever version
-```
-
-To activate the Network Groups feature, you need to create a `clever-tools-features.json` file in your `~/.config/clever-cloud/` directory with the following content:
-
-```json
-{
-  "ng": true
-}
+clever features enable ng
 ```
 
 Then, check it works with the following command:
@@ -57,30 +51,14 @@ clever ng create myNG
 You can create it declaring its members:
 
 ```
-clever ng create myNG --members-ids appId1,appId2
+clever ng create myNG --members-ids appId,addonId,externalId
 ```
 
-You can add a description, tags and ask for a JSON output (`--format` or `-F`):
+You can add a description and tags:
 
 ```
-clever ng create myNG --description "My first NG" --tags test,ng -F json
+clever ng create myNG --description "My first NG" --tags test,ng
 ```
-
-## List Network Groups
-
-Once created, you can list your Network Groups:
-
-```
-clever ng list
-
-┌─────────┬───────-┬─────────-─┬───────────────┬─────────────────┬─────────┬───────┐
-| (index) │ id     │ label     │ networkIp     │ lastAllocatedIp │ members │ peers │
-├─────────┼────────┼───────────┼───────────────┼─────────────────┼─────────┼───────┤
-│ 0       │ 'ngId' │ 'ngLabel' │ '10.x.y.z/16' │ '10.x.y.z'      │ X       │ Y     │
-└─────────┴────────┴──────────-┴───────────────┴─────────────────┴─────────┴───────┘
-```
-
-A `json` formatted output is available.
 
 ## Delete Network Groups
 
@@ -91,35 +69,46 @@ clever ng delete ngId
 clever ng delete ngLabel
 ```
 
-## Manage members of a Network Group
+## List Network Groups
 
-To add an application to a Network Group (a `label` is optional):
-
-```
-clever ng members add ngId appId
-clever ng members add ngId appId --label 'member label'
-```
-
-To get information about members (a `json` formatted output is available):
+Once created, you can list your Network Groups:
 
 ```
-clever ng members list ngId_or_ngLabel
-clever ng members get ngId_or_ngLabel memberId
+clever ng
+
+┌─────────┬───────-┬─────────-─┬───────────────┬─────────┬───────┐
+| (index) │ ID     │ Label     │ Network CIDR  │ Members │ Peers │
+├─────────┼────────┼───────────┼───────────────┼─────────┼───────┤
+│ 0       │ 'ngId' │ 'ngLabel' │ '10.x.y.z/16' │ X       │ Y     │
+└─────────┴────────┴──────────-┴───────────────┴─────────┴───────┘
 ```
 
-To delete a member from a Network Group:
+A `json` formatted output is available with the `--format/-F json` option.
+
+## (Un)Link a resource to a Network Group
+
+To (un)link an application, add-on or external peer to a Network Group:
 
 ```
-clever ng members remove ngId_or_ngLabel memberId
+clever ng members link appId ngIdOrLabel
+clever ng members unlink addonId ngIdorLabel
 ```
 
-## Manage peers of a Network Group
+## Get information of a Network Group, a member or a peer
 
-To get information about peers (a `json` formatted output is available):
+To get information about a network group or a resource (a `json` formatted output is available):
 
 ```
-clever ng peers list ngId_or_ngLabel
-clever ng peers get ngId_or_ngLabel peerId
+clever ng get ngIdOrLabel -F json
+clever ng get ressourceIdOrName
+```
+
+## Get Wireguard configuration of a Peer
+
+To get the Wireguard configuration of a peer (a `json` formatted output is available):
+
+```
+clever ng get-config peerIdOrLabel
 ```
 
 ## Demos & examples
@@ -128,4 +117,4 @@ You can find ready to deploy projects using Network Groups in the following repo
 
 - XXX
 
-Create your own and let us know!
+Create your own and [let us know](https://github.com/CleverCloud/Community/discussions/categories/network-groups)!

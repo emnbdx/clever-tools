@@ -37,7 +37,7 @@ export async function deleteNg (params) {
 /** Create an external peer in a Network Group
  * @param {Object} params
  * @param {string} params.args[0] External peer ID or label
- * @param {string} params.args[1] Wireguard® public key
+ * @param {string} params.args[1] Wireguard public key
  * @param {string} params.args[2] Network Group ID or label
  * @param {string} params.options.org Organisation ID or name
  */
@@ -50,7 +50,7 @@ export async function createExternalPeer (params) {
   }
 
   if (!publicKey) {
-    throw new Error('A Wireguard® public key is required');
+    throw new Error('A Wireguard public key is required');
   }
   await NGRessources.createExternalPeerWithParent(ngIdOrLabel, idOrLabel.ngRessourceLabel, publicKey, org);
   Logger.println(`${colors.bold.green('✓')} External peer ${colors.green(idOrLabel.ngRessourceLabel)} successfully created in Network Group ${colors.green(ngIdOrLabel.ngLabel || ngIdOrLabel.ngId)}`);
