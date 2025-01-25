@@ -56,6 +56,7 @@ import * as ssh from '../src/commands/ssh.js';
 import * as status from '../src/commands/status.js';
 import * as stop from '../src/commands/stop.js';
 import * as tcpRedirs from '../src/commands/tcp-redirs.js';
+import * as token from '../src/commands/token.js';
 import * as unlink from '../src/commands/unlink.js';
 import * as version from '../src/commands/version.js';
 import * as webhooks from '../src/commands/webhooks.js';
@@ -94,6 +95,8 @@ async function run () {
     kvIdOrName: cliparse.argument('kv-id', {
       description: 'Add-on/Real ID (or name, if unambiguous) of a Materia KV or Redis® add-on',
     }),
+    userEmail: cliparse.argument('user-email', { description: 'User email', parser: Parsers.email }),
+    tokenId: cliparse.argument('token-id', { description: 'Token ID' }),
     addonIdOrName: cliparse.argument('addon-id', {
       description: 'Add-on ID (or name, if unambiguous)',
       parser: Parsers.addonIdOrName,
@@ -880,6 +883,25 @@ async function run () {
     commands: [tcpRedirsListNamespacesCommand, tcpRedirsAddCommand, tcpRedirsRemoveCommand],
   }, tcpRedirs.list);
 
+  // TOKENS COMMANDS
+  const apiTokenCreateCommand = cliparse.command('create', {
+    description: 'Create an API token for a given user email',
+    args: [args.userEmail],
+    options: [opts.humanJsonOutputFormat],
+  }, token.create);
+  const apiTokenRevokeCommand = cliparse.command('revoke', {
+    description: 'Revoke an API token',
+    args: [args.tokenId],
+  }, token.revoke);
+  const apiTokenGetCommand = cliparse.command('get', {
+    description: 'Get information about an API token',
+    options: [opts.humanJsonOutputFormat],
+  }, token.get);
+  const tokensCommands = cliparse.command('token', {
+    description: 'Manage tokens to query API from https://XXX.services.clever-cloud.com',
+    commands: [apiTokenGetCommand, apiTokenCreateCommand, apiTokenRevokeCommand],
+  }, token.get);
+
   // UNLINK COMMAND
   const appUnlinkCommand = cliparse.command('unlink', {
     description: 'Unlink this repo from an existing application',
@@ -971,6 +993,7 @@ async function run () {
     statusCommand,
     stopCommand,
     tcpRedirsCommands,
+    tokensCommands,
     versionCommand,
     webhooksCommand,
   ];
